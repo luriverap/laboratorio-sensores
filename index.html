@@ -733,7 +733,7 @@ function setVersion(v) {
   document.querySelectorAll('.band .seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
   const d = DATA[v];
   $('stLoc').innerHTML = `<b>${d.meta.lugar}</b> · ${d.meta.centro} · UTM 18N`;
-  $('cred').textContent = `Imagen: Sentinel‑2B, nivel L2A (reflectancia de superficie), 6 de diciembre de 2025, tesela T18PUQ; la misma de la sesión 9. Recorte de 6 × 6 km (600 × 600 píxeles de 10 m) en ${d.meta.lugar}; B11 remuestreada de 20 a 10 m. Fuente: Copernicus, ESA. El vuelo de drone y el perfil de elevación son ilustrativos.`;
+  $('cred').textContent = `Imagen: Sentinel‑2B, nivel L2A (reflectancia de superficie), 6 de diciembre de 2025, tesela T18PUQ; la misma de la sesión 9. Recorte de 6 × 6 km (600 × 600 píxeles de 10 m) en ${d.meta.lugar}; B11 remuestreada de 20 a 10 m. Contiene datos modificados de Copernicus Sentinel (2025). El vuelo de drone y el perfil de elevación son ilustrativos.`;
   go(state.m);
 }
 
