@@ -33,6 +33,8 @@ Son seis misiones en secuencia: cuatro con una imagen Sentinel‑2 real y dos co
 - **Atribución:** contiene datos modificados de Copernicus Sentinel (2025).
 - **Drone:** el vuelo y el perfil de elevación son ilustrativos. No corresponden a un levantamiento real.
 
-## Autoría
+## Autoría y licencia
 
 Luna Rivera Patiño, docente de Geomática, Universidad EAFIT.
+
+Este material se comparte bajo la licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es): puede usarlo y adaptarlo, también en sus clases, citando a la autora. Los datos Sentinel conservan sus propios términos de uso de Copernicus. Más detalles en [LICENSE](LICENSE).
