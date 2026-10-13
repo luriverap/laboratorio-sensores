@@ -341,37 +341,37 @@ const PROFILE = {
 };
 
 const MISSIONS = [
-  { nm: 'Reproducir', grp: 'Satélite', qq: 'Pregunta 1', ws: 'sat',
+  { nm: 'Reproducir', grp: 'Satélite', qq: 'Preguntas 1 y 2', ws: 'sat',
     title: 'Reproduzca las dos imágenes objetivo',
-    ask: () => ['<b>P1</b>¿Qué banda va en el canal R, en el G y en el B en el objetivo 1 y en el objetivo 2?'],
+    ask: () => ['<b>P1</b>¿Qué combinación R‑G‑B reproduce el objetivo 1?', '<b>P2</b>¿Qué combinación R‑G‑B reproduce el objetivo 2?'],
     steps: '<li>Cada objetivo es una composición con nombre propio. Arme en el visor la combinación R‑G‑B que corresponde a ese nombre.</li><li>Si no la recuerda, pruebe: el medidor de parecido sube a medida que se acerca y marca ¡Coincide! al acertar.</li><li>Deje el realce activado y la resolución en 10 m.</li>',
     idea: 'La pantalla solo tiene tres cañones de color. Usted decide qué banda entra en cada uno: el color que ve depende de esa asignación, no del objeto.',
     extra: true },
-  { nm: 'Identificar', grp: 'Satélite', qq: 'Pregunta 2', ws: 'sat',
+  { nm: 'Identificar', grp: 'Satélite', qq: 'Pregunta 3', ws: 'sat',
     title: '¿Qué cobertura hay en cada punto?',
-    ask: () => ['<b>P2</b>Empareje cada punto A–E con su cobertura: bosque, pasto o cultivo verde, suelo desnudo, agua, nube o zona urbana.'],
+    ask: () => ['<b>P3</b>Empareje cada punto A–E con su cobertura: bosque, pasto o cultivo verde, suelo desnudo, agua, nube o zona urbana.'],
     steps: '<li>Pulse <b>A</b> en «Ir al punto»: la imagen se centra en él y su firma aparece a la derecha.</li><li>Compare esa firma con las firmas típicas (líneas grises) y cambie la composición para confirmar lo que ve, por ejemplo a B8‑B4‑B3.</li><li>Repita con B, C, D y E.</li>',
     idea: 'Cada cobertura tiene su firma: la vegetación sana sube fuerte en el NIR, el suelo seco crece hacia el SWIR, el agua cae casi a cero en el infrarrojo y la nube es alta en todas las bandas.' },
-  { nm: 'Resolución', grp: 'Satélite', qq: 'Preguntas 3 y 4', ws: 'sat',
+  { nm: 'Resolución', grp: 'Satélite', qq: 'Preguntas 4 y 5', ws: 'sat',
     title: 'El objeto que desaparece',
     ask: v => v === 'v1'
-      ? ['<b>P3</b>¿Desde qué resolución ya no puede distinguir el jagüey F de lo que lo rodea?', '<b>P4</b>El jagüey mide unos 40 m de lado. Con la regla de 3 a 4 celdas, ¿cuál es la fuente de píxel más grande con la que lo reconoce con confianza?']
+      ? ['<b>P4</b>¿Desde qué resolución ya no puede distinguir el jagüey F de lo que lo rodea?', '<b>P5</b>El jagüey mide unos 40 m de lado. Con la regla de 3 a 4 celdas, ¿cuál es la fuente de píxel más grande con la que lo reconoce con confianza?']
       : ['<b>P3</b>¿Desde qué resolución ya no puede distinguir el caño F de lo que lo rodea?', '<b>P4</b>El caño mide unos 20 m de ancho. Con la regla de 3 a 4 celdas, ¿cuál es la fuente de píxel más grande con la que lo reconoce con confianza?'],
     steps: '<li>Pulse <b>F</b> en «Ir al punto»: la imagen se amplía a 3× y se centra en el objeto.</li><li>Cambie la resolución a 20, 30 y 60 m y observe qué le pasa a F.</li><li>Para moverse por la imagen ampliada, arrástrela con el mouse.</li>',
     idea: 'Para reconocer un objeto con confianza se necesitan al menos 3 o 4 celdas dentro de él. Con celdas más grandes, el objeto se mezcla con su entorno en un píxel mixto.' },
-  { nm: 'Firma', grp: 'Satélite', qq: 'Preguntas 5 y 6', ws: 'sat',
+  { nm: 'Firma', grp: 'Satélite', qq: 'Preguntas 6 y 7', ws: 'sat',
     title: 'Rojo contra infrarrojo cercano',
-    ask: v => ['<b>P5</b>¿Cuál de los puntos A–E tiene la mayor diferencia B8 − B4?', `<b>P6</b>Si el lote del punto ${v === 'v1' ? 'B' : 'D'} se estresa por sequía, ¿qué pasa con B4, con B8 y con su diferencia?`],
+    ask: v => ['<b>P6</b>¿Cuál de los puntos A–E tiene la mayor diferencia B8 − B4?', `<b>P7</b>Si el lote del punto ${v === 'v1' ? 'B' : 'D'} se estresa por sequía, ¿qué pasa con B4, con B8 y con su diferencia?`],
     steps: '<li>Pulse cada punto de A a E en «Ir al punto».</li><li>Lea el valor <b>NIR − rojo</b> que aparece debajo de la gráfica.</li><li>Use <b>Fijar para comparar</b> para ver dos firmas a la vez.</li>',
     idea: 'La clorofila absorbe el rojo y la estructura interna de la hoja refleja el NIR. Por eso la diferencia NIR − rojo es grande en vegetación activa y pequeña en suelo o en una planta estresada. Esa diferencia es la base del NDVI.' },
-  { nm: 'Vuelo', grp: 'Drone', qq: 'Pregunta 7', ws: 'flight',
+  { nm: 'Vuelo', grp: 'Drone', qq: 'Pregunta 8', ws: 'flight',
     title: '¿Cuánto traslape necesita el vuelo?',
-    ask: v => [`<b>P7</b>¿Cuál es el traslape mínimo para que todo el lote aparezca en al menos ${v === 'v1' ? 2 : 3} fotos?`],
+    ask: v => [`<b>P8</b>¿Cuál es el traslape mínimo para que todo el lote aparezca en al menos ${v === 'v1' ? 2 : 3} fotos?`],
     steps: '<li>Mueva el traslape entre fotos consecutivas.</li><li>Observe la franja de colores del lote: indica en cuántas fotos aparece cada punto del terreno.</li><li>Busque el traslape mínimo que pide la pregunta.</li>',
     idea: 'La fotogrametría calcula la altura de un punto comparándolo desde dos o más fotos tomadas desde lugares distintos. Un punto que aparece en una sola foto no se puede reconstruir en 3D. Por eso un vuelo entrega cientos de imágenes con traslape y no una sola foto.' },
-  { nm: 'Elevación', grp: 'Drone', qq: 'Preguntas 8 a 11', ws: 'profile',
+  { nm: 'Elevación', grp: 'Drone', qq: 'Preguntas 9 a 12', ws: 'profile',
     title: 'Del vuelo al modelo de elevación',
-    ask: v => [`<b>P8</b>¿Qué altura tiene ${v === 'v1' ? 'el árbol P' : 'el cultivo de plátano P'} en su punto más alto?`, '<b>P9</b>¿Qué producto del vuelo usaría para cada tarea?', '<b>P10</b>¿Puede un drone con cámara RGB corriente dar un NDVI real?', '<b>P11</b>¿Drone, Sentinel‑2 o Landsat para cada caso?'],
+    ask: v => [`<b>P9</b>¿Qué altura tiene ${v === 'v1' ? 'el árbol P' : 'el cultivo de plátano P'} en su punto más alto?`, '<b>P10</b>¿Qué producto del vuelo usaría para cada tarea?', '<b>P11</b>¿Puede un drone con cámara RGB corriente dar un NDVI real?', '<b>P12</b>¿Drone, Sentinel‑2 o Landsat para cada caso?'],
     steps: '<li>Recorra el perfil con el control deslizante o arrastrando sobre la gráfica.</li><li>Prenda y apague el ortomosaico, la nube de puntos, el MDS y el MDT.</li><li>Mida la altura del objeto <b>P</b> en su punto más alto.</li>',
     idea: 'El MDS es la superficie con vegetación y construcciones; el MDT, el terreno desnudo. Las pendientes se calculan con el MDT, y la altura de un cultivo es MDS − MDT. Un drone con cámara RGB corriente no tiene banda infrarroja, así que no da NDVI real.' },
 ];
@@ -713,7 +713,7 @@ function renderMission() {
   html += `<div class="idea"><b class="lab">Idea clave</b><p>${m.idea}</p></div>`;
   const nx = MISSIONS[state.m + 1];
   html += nx ? `<div class="next"><button class="btn primary" type="button" id="nextBtn">Siguiente: ${nx.nm} →</button></div>`
-             : `<p class="diff">Última misión. Revise que respondió las 11 preguntas en Interactiva antes de enviar.</p>`;
+             : `<p class="diff">Última misión. Revise que respondió las 12 preguntas en Interactiva antes de enviar.</p>`;
   $('mission').innerHTML = html;
   if (nx) $('nextBtn').onclick = () => { go(state.m + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   ['wsSat', 'wsFlight', 'wsProfile'].forEach(id => $(id).hidden = id !== { sat: 'wsSat', flight: 'wsFlight', profile: 'wsProfile' }[m.ws]);
