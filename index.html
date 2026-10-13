@@ -321,7 +321,8 @@ const BANDS = [
   { id: 'B08', name: 'NIR', nm: 842 }, { id: 'B11', name: 'SWIR', nm: 1610 },
 ];
 const REFS = [
-  { name: 'Vegetación sana', v: [0.03, 0.07, 0.04, 0.42, 0.20], dash: '' },
+  { name: 'Bosque', v: [0.025, 0.045, 0.025, 0.34, 0.16], dash: '' },
+  { name: 'Pasto', v: [0.04, 0.085, 0.045, 0.42, 0.25], dash: '10 3 2 3' },
   { name: 'Suelo seco', v: [0.08, 0.11, 0.15, 0.25, 0.36], dash: '6 4' },
   { name: 'Agua clara', v: [0.06, 0.05, 0.03, 0.01, 0.005], dash: '2 4' },
 ];
@@ -349,9 +350,9 @@ const MISSIONS = [
     extra: true },
   { nm: 'Identificar', grp: 'Satélite', qq: 'Pregunta 3', ws: 'sat',
     title: '¿Qué cobertura hay en cada punto?',
-    ask: () => ['<b>P3</b>Empareje cada punto A–E con su cobertura: bosque, pasto o cultivo verde, suelo desnudo, agua, nube o zona urbana.'],
+    ask: () => ['<b>P3</b>¿Qué combinación de coberturas corresponde a los puntos A, B, C, D y E? (bosque, pasto, suelo desnudo, agua o nube)'],
     steps: '<li>Pulse <b>A</b> en «Ir al punto»: la imagen se centra en él y su firma aparece a la derecha.</li><li>Compare esa firma con las firmas típicas (líneas grises) y cambie la composición para confirmar lo que ve, por ejemplo a B8‑B4‑B3.</li><li>Repita con B, C, D y E.</li>',
-    idea: 'Cada cobertura tiene su firma: la vegetación sana sube fuerte en el NIR, el suelo seco crece hacia el SWIR, el agua cae casi a cero en el infrarrojo y la nube es alta en todas las bandas.' },
+    idea: 'Cada cobertura tiene su firma: la vegetación sana sube fuerte en el NIR, el suelo seco crece hacia el SWIR, el agua cae casi a cero en el infrarrojo y la nube es alta en todas las bandas. Entre dos vegetaciones sanas, el bosque es más oscuro en todas las bandas y tiene menos SWIR (B11) que el pasto, por las sombras entre copas y el agua del dosel; en falso color se ve rojo oscuro y rugoso, y el pasto rojo claro y liso.' },
   { nm: 'Resolución', grp: 'Satélite', qq: 'Preguntas 4 y 5', ws: 'sat',
     title: 'El objeto que desaparece',
     ask: v => v === 'v1'
@@ -543,7 +544,7 @@ function goToPoint(id) {
 
 /* ---------------- firma espectral ---------------- */
 function firmaSvg() {
-  const W = 520, H = 230, L = 44, R = 14, T = 12, B = 34;
+  const W = 560, H = 230, L = 44, R = 88, T = 12, B = 34;
   const xs = BANDS.map((_, i) => L + i * (W - L - R) / 4), y = v => T + (1 - Math.min(v, 0.5) / 0.5) * (H - T - B);
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Firma espectral">`;
   for (let g = 0; g <= 5; g++) { const yy = y(g / 10); s += `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${L - 8}" y="${yy + 4}" text-anchor="end">${(g / 10).toFixed(1)}</text>`; }
@@ -553,7 +554,7 @@ function firmaSvg() {
     if (dots) v.forEach((vv, i) => p += `<circle cx="${xs[i]}" cy="${y(vv)}" r="4.5" fill="${stroke}" stroke="var(--surface)" stroke-width="2"/>`);
     return p;
   };
-  if (state.refs) REFS.forEach(r => s += line(r.v, 'var(--muted)', 1.5, r.dash, false));
+  if (state.refs) REFS.forEach(r => { s += line(r.v, 'var(--muted)', 1.5, r.dash, false); s += `<text x="${xs[4] + 8}" y="${y(r.v[4]) + 4}">${r.name}</text>`; });
   if (state.pin) s += line(state.pin.v, 'var(--brand-2)', 2.5, '7 4', true);
   if (state.cur) s += line(state.cur.v, 'var(--accent)', 3, '', true);
   return s + '</svg>';
@@ -563,7 +564,7 @@ function renderFirma() {
   const vals = c ? `<div class="vals">${BANDS.map((b, i) => `<div><small>${b.id} · ${b.name}</small><b>${fmt(c.v[i])}</b><i style="background:var(--${b.id.toLowerCase()})"></i></div>`).join('')}</div>
      <p class="diff">NIR − rojo (B8 − B4): <b>${fmt(c.v[3] - c.v[2])}</b>${state.pin ? ` &nbsp;·&nbsp; ${state.pin.label}: <b>${fmt(state.pin.v[3] - state.pin.v[2])}</b>` : ''}</p>` :
     '<p class="empty">Haga clic sobre un punto (A–E) o sobre cualquier lugar de la imagen para ver cuánta energía refleja en cada banda.</p>';
-  const leg = `<div class="legend">${c ? `<span><i style="background:var(--accent)"></i>${c.label}</span>` : ''}${state.pin ? `<span><i style="background:var(--brand-2)"></i>${state.pin.label} (fijada)</span>` : ''}${state.refs ? '<span><i style="background:var(--muted)"></i>Firmas típicas: vegetación sana, suelo seco (– –) y agua clara (· ·)</span>' : ''}</div>`;
+  const leg = `<div class="legend">${c ? `<span><i style="background:var(--accent)"></i>${c.label}</span>` : ''}${state.pin ? `<span><i style="background:var(--brand-2)"></i>${state.pin.label} (fijada)</span>` : ''}${state.refs ? '<span><i style="background:var(--muted)"></i>Líneas grises: firmas típicas de referencia</span>' : ''}</div>`;
   $('panel').innerHTML = `<header><h3>Firma espectral${c ? ' · ' + c.label : ''}</h3><span class="src">${c ? c.src : 'reflectancia de superficie (0 a 1)'}</span></header>
     <div class="chart">${V(firmaSvg())}</div>${leg}${vals}
     <div class="row"><button class="btn" type="button" id="pinBtn" ${c ? '' : 'disabled'}>Fijar para comparar</button>${state.pin ? '<button class="btn" type="button" id="unpinBtn">Quitar fijada</button>' : ''}
