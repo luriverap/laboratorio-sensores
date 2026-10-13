@@ -321,10 +321,10 @@ const BANDS = [
   { id: 'B08', name: 'NIR', nm: 842 }, { id: 'B11', name: 'SWIR', nm: 1610 },
 ];
 const REFS = [
-  { name: 'Bosque', v: [0.025, 0.045, 0.025, 0.34, 0.16], dash: '' },
-  { name: 'Pasto', v: [0.04, 0.085, 0.045, 0.42, 0.25], dash: '10 3 2 3' },
+  { name: 'Bosque', v: [0.025, 0.045, 0.025, 0.38, 0.16], dash: '' },
+  { name: 'Pasto', v: [0.04, 0.085, 0.045, 0.47, 0.25], dash: '10 3 2 3' },
   { name: 'Suelo seco', v: [0.08, 0.11, 0.15, 0.25, 0.36], dash: '6 4' },
-  { name: 'Agua clara', v: [0.06, 0.05, 0.03, 0.01, 0.005], dash: '2 4' },
+  { name: 'Agua con sedimento', v: [0.07, 0.11, 0.13, 0.07, 0.01], dash: '2 4' },
 ];
 const Q = 0.0025, N = 600;
 
@@ -352,7 +352,7 @@ const MISSIONS = [
     title: '¿Qué cobertura hay en cada punto?',
     ask: () => ['<b>P3</b>¿Qué combinación de coberturas corresponde a los puntos A, B, C, D y E? (bosque, pasto, suelo desnudo, agua o nube)'],
     steps: '<li>Pulse <b>A</b> en «Ir al punto»: la imagen se centra en él y su firma aparece a la derecha.</li><li>Compare esa firma con las firmas típicas (líneas grises) y cambie la composición para confirmar lo que ve, por ejemplo a B8‑B4‑B3.</li><li>Repita con B, C, D y E.</li>',
-    idea: 'Cada cobertura tiene su firma: la vegetación sana sube fuerte en el NIR, el suelo seco crece hacia el SWIR, el agua cae casi a cero en el infrarrojo y la nube es alta en todas las bandas. Entre dos vegetaciones sanas, el bosque es más oscuro en todas las bandas y tiene menos SWIR (B11) que el pasto, por las sombras entre copas y el agua del dosel; en falso color se ve rojo oscuro y rugoso, y el pasto rojo claro y liso.' },
+    idea: 'Cada cobertura tiene su firma: la vegetación sana sube fuerte en el NIR, el suelo seco crece hacia el SWIR, el agua cae casi a cero en el SWIR (si lleva sedimento, como los ríos de la zona, refleja algo de rojo y por eso se ve café) y la nube es alta en todas las bandas, incluso el azul. Entre dos vegetaciones sanas, el bosque es más oscuro en todas las bandas y tiene menos SWIR (B11) que el pasto, por las sombras entre copas y el agua del dosel; en falso color se ve rojo oscuro y rugoso, y el pasto rojo claro y liso.' },
   { nm: 'Resolución', grp: 'Satélite', qq: 'Preguntas 4 y 5', ws: 'sat',
     title: 'El objeto que desaparece',
     ask: v => v === 'v1'
@@ -551,7 +551,7 @@ function goToPoint(id) {
 
 /* ---------------- firma espectral ---------------- */
 function firmaSvg() {
-  const W = 560, H = 230, L = 44, R = 88, T = 12, B = 34;
+  const W = 620, H = 230, L = 44, R = 140, T = 12, B = 34;
   const xs = BANDS.map((_, i) => L + i * (W - L - R) / 4), y = v => T + (1 - Math.min(v, 0.5) / 0.5) * (H - T - B);
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Firma espectral">`;
   for (let g = 0; g <= 5; g++) { const yy = y(g / 10); s += `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${L - 8}" y="${yy + 4}" text-anchor="end">${(g / 10).toFixed(1)}</text>`; }
