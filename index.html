@@ -497,10 +497,17 @@ function selectPoint(p) {
   if (state.m === 1 || state.m === 3) markDone(state.m);
   renderPanel(); renderSat();
 }
+async function firmaF() {
+  const f = DATA[state.v].f, b = await bandsAt(state.v, state.f), i = f.y * N + f.x;
+  state.sel = 'F';
+  state.cur = { label: 'Punto F', src: `píxel central a ${state.f * 10} m`, v: BANDS.map(bb => b[bb.id][i]) };
+  renderPanel(); renderSat();
+}
 async function pick(ev) {
   const [x, y] = toPix(ev), d = DATA[state.v];
   const hit = d.points.find(p => Math.hypot(p.x - x, p.y - y) <= 10);
   if (hit) return selectPoint(hit);
+  if (Math.hypot(d.f.x - x, d.f.y - y) <= 12) return firmaF();
   state.sel = null;
   const b = await bandsAt(state.v, state.f), i = y * N + x;
   state.cur = { label: `Píxel ${x}, ${y}`, src: `un píxel a ${state.f * 10} m`, v: BANDS.map(bb => b[bb.id][i]) };
@@ -539,7 +546,7 @@ function setZoom(z, cx, cy) {
 function goToPoint(id) {
   const d = DATA[state.v], p = id === 'F' ? d.f : d.points.find(q => q.id === id);
   setZoom(id === 'F' ? 3 : Math.max(state.z, 2), p.x, p.y);
-  if (id === 'F') { state.sel = null; renderSat(); } else selectPoint(p);
+  if (id === 'F') firmaF(); else selectPoint(p);
 }
 
 /* ---------------- firma espectral ---------------- */
@@ -749,7 +756,7 @@ function segment(id, key, apply) {
   const el = $(id);
   el.addEventListener('click', ev => { const b = ev.target.closest('button'); if (!b) return; el.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); apply(b.dataset[key]); });
 }
-segment('resSeg', 'f', f => { state.f = +f; if (state.m === 2 && f !== '1') markDone(2); renderSat(); });
+segment('resSeg', 'f', f => { state.f = +f; if (state.m === 2 && f !== '1') markDone(2); if (state.sel === 'F') firmaF(); else renderSat(); });
 $('zoomSeg').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) setZoom(+b.dataset.z); });
 $('goSeg').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) goToPoint(b.dataset.p); });
 document.querySelectorAll('.band .seg button').forEach(b => b.addEventListener('click', () => setVersion(b.dataset.v)));
